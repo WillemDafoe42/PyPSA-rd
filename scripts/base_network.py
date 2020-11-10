@@ -110,7 +110,7 @@ def _find_closest_links(links, new_links, distance_upper_bound=1.5):
                          .sort_index()['i']
 
 def _load_buses_from_eg():
-    buses = (pd.read_csv(snakemake.input.eg_buses, quotechar="'",
+    buses = (pd.read_csv('data/entsoegridkit/buses.csv', quotechar="'",
                          true_values='t', false_values='f',
                          dtype=dict(bus_id="str"))
             .set_index("bus_id")
@@ -121,7 +121,7 @@ def _load_buses_from_eg():
     buses['under_construction'] = buses['under_construction'].fillna(False).astype(bool)
 
     # remove all buses outside of all countries including exclusive economic zones (offshore)
-    europe_shape = gpd.read_file(snakemake.input.europe_shape).loc[0, 'geometry']
+    europe_shape = gpd.read_file('resources/europe_shape.geojson').loc[0, 'geometry']
     europe_shape_prepped = shapely.prepared.prep(europe_shape)
     buses_in_europe_b = buses[['x', 'y']].apply(lambda p: europe_shape_prepped.contains(Point(p)), axis=1)
 
