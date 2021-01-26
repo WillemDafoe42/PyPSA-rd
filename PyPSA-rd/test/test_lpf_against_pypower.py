@@ -1,4 +1,4 @@
-import pypsa
+import pypsa-rd
 
 #NB: this test doesn't work for other cases because transformer tap
 #ratio and phase angle not supported for lpf
@@ -49,9 +49,9 @@ def test_pypower_case():
 
 
 
-    #now compute in PyPSA
+    #now compute in pypsa-rd
 
-    network = pypsa.Network()
+    network = pypsa-rd.Network()
     network.import_from_pypower_ppc(ppc)
     network.lpf()
 
@@ -59,10 +59,10 @@ def test_pypower_case():
 
     #compare generator dispatch
 
-    p_pypsa = network.generators_t.p.loc["now"].values
+    p_pypsa-rd = network.generators_t.p.loc["now"].values
     p_pypower = results_df['gen']["p"].values
 
-    np.testing.assert_array_almost_equal(p_pypsa,p_pypower)
+    np.testing.assert_array_almost_equal(p_pypsa-rd,p_pypower)
 
     #compare branch flows
     for item in ["lines","transformers"]:
@@ -70,6 +70,6 @@ def test_pypower_case():
         pnl = getattr(network,item + "_t")
 
         for si in ["p0","p1"]:
-            si_pypsa = getattr(pnl,si).loc["now"].values
+            si_pypsa-rd = getattr(pnl,si).loc["now"].values
             si_pypower = results_df['branch'][si][df.original_index].values
-            np.testing.assert_array_almost_equal(si_pypsa,si_pypower)
+            np.testing.assert_array_almost_equal(si_pypsa-rd,si_pypower)

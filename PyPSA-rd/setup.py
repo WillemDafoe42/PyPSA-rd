@@ -10,14 +10,14 @@ with open('README.rst', encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='pypsa',
-    version='0.17.1',
-    author='Tom Brown (FIAS, KIT), Jonas Hoersch (FIAS, KIT), Fabian Hofmann (FIAS), Fabian Neumann (KIT), David Schlachtberger (FIAS)',
-    author_email='tom.brown@kit.edu',
-    description='Python for Power Systems Analysis',
+    name='pypsa-rd',
+    version='0.0.1',
+    author='Willem Laumen (ETH Zurich), Tom Brown (FIAS, KIT), Jonas Hoersch (FIAS, KIT), Fabian Hofmann (FIAS), Fabian Neumann (KIT), David Schlachtberger (FIAS)',
+    author_email='willem.laumen@rwth-aachen.de',
+    description='Python for Power Systems Analysis Redispatch Analysis',
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    url='https://github.com/PyPSA/PyPSA',
+    url='https://github.com/WillemDafoe42/PyPSA-rd',
     license='GPLv3',
     packages=find_packages(exclude=['doc', 'test']),
     include_package_data=True,

@@ -1,15 +1,6 @@
-|badge_pypi| |badge_conda| |badge_travis| |badge_docs| |badge_license| |link-latest-doi| |gitter| |binder|
-
------
-
 ################################
-Python for Power System Analysis
+Built with: Python for Power System Analysis
 ################################
-
-.. contents::
-
-.. section-numbering::
-
 
 About
 =====

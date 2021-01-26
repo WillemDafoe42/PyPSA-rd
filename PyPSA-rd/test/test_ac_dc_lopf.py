@@ -1,4 +1,4 @@
-import pypsa
+import pypsa-rd
 from itertools import product
 import os
 from numpy.testing import assert_array_almost_equal as equal
@@ -12,11 +12,11 @@ def test_lopf():
     csv_folder_name = os.path.join(os.path.dirname(__file__), "..", "examples",
                                    "ac-dc-meshed", "ac-dc-data")
 
-    n = pypsa.Network(csv_folder_name)
+    n = pypsa-rd.Network(csv_folder_name)
 
     results_folder_name = os.path.join(csv_folder_name,"results-lopf")
 
-    n_r = pypsa.Network(results_folder_name)
+    n_r = pypsa-rd.Network(results_folder_name)
 
     #test results were generated with GLPK; solution should be unique,
     #so other solvers should not differ (tested with cbc and gurobi)
@@ -24,7 +24,7 @@ def test_lopf():
     snapshots = n.snapshots
 
     for formulation, free_memory in product(["angles", "cycles", "kirchhoff", "ptdf"],
-                                            [{}, {"pypsa"}]):
+                                            [{}, {"pypsa-rd"}]):
         n.lopf(snapshots=snapshots, solver_name=solver_name,
                formulation=formulation, free_memory=free_memory)
 

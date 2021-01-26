@@ -17,7 +17,7 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""Python for Power Systems Analysis (PyPSA)
+"""Python for Power Systems Analysis (PyPSA) Redispatch Analysis
 
 Grid calculation library.
 """
@@ -28,6 +28,6 @@ from . import (pf, opf, opt, plot, networkclustering, io, contingency, geo,
 
 from .components import Network, SubNetwork
 
-__version__ = "0.17.1"
-__author__ = "Tom Brown (KIT, FIAS), Jonas Hoersch (KIT, FIAS), Fabian Hofmann (FIAS), Fabian Neumann (KIT), David Schlachtberger (FIAS)"
+__version__ = "0.0.1"
+__author__ = "Willem Laumen (ETH Zurich) Tom Brown (KIT, FIAS), Jonas Hoersch (KIT, FIAS), Fabian Hofmann (FIAS), Fabian Neumann (KIT), David Schlachtberger (FIAS)"
 __copyright__ = "Copyright 2015-2020 Tom Brown (KIT, FIAS), Jonas Hoersch (KIT, FIAS), Fabian Hofmann (FIAS), Fabian Neumann (KIT), David Schlachtberger (FIAS), GNU GPL 3"
