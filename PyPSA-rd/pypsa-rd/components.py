@@ -50,7 +50,7 @@ from .pf import (network_lpf, sub_network_lpf, network_pf,
 from .contingency import (calculate_BODF, network_lpf_contingency,
                           network_sclopf)
 
-
+#importiert den pyomo lopf
 from .opf import network_lopf, network_opf
 
 from .plot import plot, iplot
@@ -59,6 +59,7 @@ from .graph import graph, incidence_matrix, adjacency_matrix
 
 import sys
 
+#importiert den nomopyomo lopf (verbraucht weniger memory)
 if sys.version_info.major >= 3:
     from .linopf import network_lopf as network_lopf_lowmem
 

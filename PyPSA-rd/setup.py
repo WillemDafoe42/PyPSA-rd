@@ -14,7 +14,7 @@ setup(
     version='0.0.1',
     author='Willem Laumen (ETH Zurich), Tom Brown (FIAS, KIT), Jonas Hoersch (FIAS, KIT), Fabian Hofmann (FIAS), Fabian Neumann (KIT), David Schlachtberger (FIAS)',
     author_email='willem.laumen@rwth-aachen.de',
-    description='Python for Power Systems Analysis Redispatch Analysis',
+    description='Python for Power Systems Analysis - Redispatch Analysis',
     long_description=long_description,
     long_description_content_type='text/x-rst',
     url='https://github.com/WillemDafoe42/PyPSA-rd',
