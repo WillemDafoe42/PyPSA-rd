@@ -11,7 +11,7 @@ with open('README.rst', encoding='utf-8') as f:
 
 setup(
     name='pypsa-rd',
-    version='0.0.1',
+    version='0.0.5',
     author='Willem Laumen (ETH Zurich), Tom Brown (FIAS, KIT), Jonas Hoersch (FIAS, KIT), Fabian Hofmann (FIAS), Fabian Neumann (KIT), David Schlachtberger (FIAS)',
     author_email='willem.laumen@rwth-aachen.de',
     description='Python for Power Systems Analysis - Redispatch Analysis',

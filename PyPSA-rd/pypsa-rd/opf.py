@@ -957,7 +957,7 @@ def define_passive_branch_flows_with_kirchhoff(network,snapshots,skip_vars=False
     l_constraint(network.model, "cycle_constraints", cycle_constraints,
                  cycle_index, snapshots)
 
-def define_passive_branch_constraints(network,snapshots):
+def define_passive_branch_constraints(network,snapshots,mode):
 
     passive_branches = network.passive_branches()
     extendable_branches = passive_branches[passive_branches.s_nom_extendable]
@@ -976,16 +976,16 @@ def define_passive_branch_constraints(network,snapshots):
                                           (-s_max_pu.at[sn,b],network.model.passive_branch_s_nom[b[0],b[1]])],"<=",0]
                        for b in extendable_branches.index
                        for sn in snapshots})
+    if mode != "market":
+        l_constraint(network.model, "flow_upper", flow_upper, list(passive_branches.index), snapshots)
 
-    l_constraint(network.model, "flow_upper", flow_upper,
-                 list(passive_branches.index), snapshots)
 
-    flow_lower = {(b[0],b[1],sn) : [[(1,network.model.passive_branch_p[b[0],b[1],sn])],
-                                    ">=", -s_max_pu.at[sn,b]*fixed_branches.at[b,"s_nom"]]
-                  for b in fixed_branches.index
-                  for sn in snapshots}
+    flow_lower = {(b[0], b[1], sn): [[(1, network.model.passive_branch_p[b[0], b[1], sn])],
+                                     ">=", -s_max_pu.at[sn, b] * fixed_branches.at[b, "s_nom"]]
+    for b in fixed_branches.index
+        for sn in snapshots}
 
-    flow_lower.update({(b[0],b[1],sn): [[(1,network.model.passive_branch_p[b[0],b[1],sn]),
+        flow_lower.update({(b[0],b[1],sn): [[(1,network.model.passive_branch_p[b[0],b[1],sn]),
                                          (s_max_pu.at[sn,b],network.model.passive_branch_s_nom[b[0],b[1]])],">=",0]
                        for b in extendable_branches.index
                        for sn in snapshots})
@@ -1304,15 +1304,22 @@ def extract_optimisation_results(network, snapshots, formulation="angles", free_
 
     # passive branches
     passive_branches = get_values(model.passive_branch_p)
+
     flow_lower = get_shadows(model.flow_lower)
-    flow_upper = get_shadows(model.flow_upper)
+    if mode != "market":
+        flow_upper = get_shadows(model.flow_upper)
+
     for c in network.iterate_components(network.passive_branch_components):
         set_from_series(c.pnl.p0, passive_branches.loc[c.name])
         c.pnl.p1.loc[snapshots] = - c.pnl.p0.loc[snapshots]
-
         set_from_series(c.pnl.mu_lower, flow_lower[c.name])
-        set_from_series(c.pnl.mu_upper, -flow_upper[c.name])
-    del flow_lower, flow_upper
+        if mode != "market":
+            set_from_series(c.pnl.mu_upper, -flow_upper[c.name])
+    if mode != "market":
+        del flow_lower, flow_upper
+    else:
+        del flow_lower
+
 
     # active branches
     if len(network.links):
@@ -1416,7 +1423,7 @@ def extract_optimisation_results(network, snapshots, formulation="angles", free_
         extra_postprocessing(network, snapshots, duals)
 
 
-def network_lopf_build_model(network, snapshots=None, skip_pre=False,
+def network_lopf_build_model(network, snapshots=None, skip_pre=False, mode = "lopf",
                              formulation="angles", ptdf_tolerance=0.):
     """
     Build pyomo model for linear optimal power flow for a group of snapshots.
@@ -1468,7 +1475,7 @@ def network_lopf_build_model(network, snapshots=None, skip_pre=False,
 
     define_passive_branch_flows(network,snapshots,formulation,ptdf_tolerance)
 
-    define_passive_branch_constraints(network,snapshots)
+    define_passive_branch_constraints(network,snapshots,mode)
 
     if formulation in ["angles", "kirchhoff"]:
         define_nodal_balance_constraints(network,snapshots)
@@ -1595,7 +1602,7 @@ def network_lopf_solve(network, snapshots=None, formulation="angles", solver_opt
 def network_lopf(network, snapshots=None, solver_name="glpk", solver_io=None,
                  skip_pre=False, extra_functionality=None, solver_logfile=None, solver_options={},
                  keep_files=False, formulation="angles", ptdf_tolerance=0.,
-                 free_memory={},extra_postprocessing=None):
+                 free_memory={},extra_postprocessing=None, mode = "lopf"):
     """
     Linear optimal power flow for a group of snapshots.
 
@@ -1641,6 +1648,7 @@ def network_lopf(network, snapshots=None, solver_name="glpk", solver_io=None,
         `extra_postprocessing(network,snapshots,duals)` and is called after
         the model has solved and the results are extracted. It allows the user to
         extract further information about the solution, such as additional shadow prices.
+    mode: "market", "lopf", "redispatch" decide whether you want to run a market model, "normal" linopf, or redispatch analysis.
 
     Returns
     -------
@@ -1650,7 +1658,7 @@ def network_lopf(network, snapshots=None, solver_name="glpk", solver_io=None,
     snapshots = _as_snapshots(network, snapshots)
 
     network_lopf_build_model(network, snapshots, skip_pre=skip_pre,
-                             formulation=formulation, ptdf_tolerance=ptdf_tolerance)
+                             formulation=formulation, ptdf_tolerance=ptdf_tolerance, mode)
 
     if extra_functionality is not None:
         extra_functionality(network,snapshots)

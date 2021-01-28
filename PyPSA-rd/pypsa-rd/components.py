@@ -396,7 +396,7 @@ class Network(Basic):
 
     def lopf(self, snapshots=None, pyomo=True, solver_name="glpk",
              solver_options={}, solver_logfile=None, formulation="kirchhoff",
-             keep_files=False, extra_functionality=None,  **kwargs):
+             keep_files=False, extra_functionality=None, mode = "lopf", **kwargs):
         """
         Linear optimal power flow for a group of snapshots.
 
@@ -484,6 +484,8 @@ class Network(Basic):
             Only taking effect when pyomo is False.
             Path to directory where necessary files are written, default None leads
             to the default temporary directory used by tempfile.mkstemp().
+        mode: decision variable which optimization algorithm is demanded to run.
+
 
         Returns
         -------
